@@ -7,6 +7,8 @@
 #include <CoreMinimal.h>
 #include <AbilitySystemInterface.h>
 #include <GameFramework/PlayerState.h>
+#include <GameplayTagContainer.h>
+#include <Core/PEAbilitySystemComponent.h>
 #include "PEPlayerState.generated.h"
 
 /**
@@ -31,8 +33,8 @@ public:
     explicit APEPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 private:
-    void DeathStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
-    void StunStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
+    void DeathStateChanged_Callback(const FGameplayTag CallbackTag, const int32 NewCount) const;
+    void StunStateChanged_Callback(const FGameplayTag CallbackTag, const int32 NewCount) const;
 
 protected:
     virtual void BeginPlay() override;

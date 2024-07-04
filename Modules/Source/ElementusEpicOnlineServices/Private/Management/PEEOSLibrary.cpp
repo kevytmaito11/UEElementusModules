@@ -5,6 +5,7 @@
 #include "Management/PEEOSLibrary.h"
 #include <Online/OnlineSessionNames.h>
 #include <EOSVoiceChatUser.h>
+#include "LogElementusEpicOnlineServices.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEEOSLibrary)
 

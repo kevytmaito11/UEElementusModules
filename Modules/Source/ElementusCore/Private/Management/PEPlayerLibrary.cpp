@@ -5,6 +5,7 @@
 #include "Management/PEPlayerLibrary.h"
 #include <EnhancedInputSubsystems.h>
 #include <EnhancedInputComponent.h>
+#include "LogElementusCore.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEPlayerLibrary)
 

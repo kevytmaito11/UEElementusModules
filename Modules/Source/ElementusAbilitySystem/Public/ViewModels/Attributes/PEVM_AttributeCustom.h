@@ -34,8 +34,9 @@ public:
     UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
     float Gold;
 
-protected:
     virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue) override;
+
+protected:
 
 private:
     void SetAttackRate(const float Value);

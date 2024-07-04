@@ -6,6 +6,9 @@
 
 #include <CoreMinimal.h>
 #include <GameFramework/HUD.h>
+#include <ViewModels/Attributes/PEVM_AttributeBasic.h>
+#include <ViewModels/Attributes/PEVM_AttributeCustom.h>
+#include <ViewModels/Attributes/PEVM_AttributeLeveling.h>
 #include "PEHUD.generated.h"
 
 /**
@@ -23,13 +26,13 @@ public:
 
 protected:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-    TObjectPtr<class UPEVM_AttributeBase> BasicAttributes_VM;
+    TObjectPtr<UPEVM_AttributeBasic> BasicAttributes_VM;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-    TObjectPtr<class UPEVM_AttributeBase> CustomAttributes_VM;
+    TObjectPtr<UPEVM_AttributeCustom> CustomAttributes_VM;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-    TObjectPtr<class UPEVM_AttributeBase> LevelingAttributes_VM;
+    TObjectPtr<UPEVM_AttributeLeveling> LevelingAttributes_VM;
 
     /* A Blueprint Widget class to use as HUD */
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Project Elementus | Properties")
@@ -41,6 +44,7 @@ protected:
     virtual void OnViewModelAttributeChange(const struct FOnAttributeChangeData& AttributeChangeData);
     void NotifyAttributeChange(const struct FGameplayAttribute& Attribute, const float& NewValue);
 
-private:
     TWeakObjectPtr<UUserWidget> HUDHandle;
+
+private:
 };

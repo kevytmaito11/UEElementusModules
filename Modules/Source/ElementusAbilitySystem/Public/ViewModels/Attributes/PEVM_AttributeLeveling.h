@@ -31,8 +31,9 @@ public:
     UFUNCTION(BlueprintPure, FieldNotify, Category = "Project Elementus | Functions")
     float GetExperiencePercent() const;
 
-protected:
     virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue) override;
+
+protected:
 
 private:
     void SetCurrentLevel(const float Value);

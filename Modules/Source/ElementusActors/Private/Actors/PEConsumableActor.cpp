@@ -7,6 +7,7 @@
 #include <Core/PEAbilitySystemComponent.h>
 #include <Components/StaticMeshComponent.h>
 #include <GameFramework/Character.h>
+#include <NiagaraSystem.h>
 #include <NiagaraComponent.h>
 #include <AbilitySystemGlobals.h>
 

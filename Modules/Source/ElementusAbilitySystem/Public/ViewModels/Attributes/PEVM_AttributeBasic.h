@@ -46,8 +46,9 @@ public:
     UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
     float MaxStamina;
 
-protected:
     virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue) override;
+
+protected:
 
 private:
     void SetHealth(const float Value);
