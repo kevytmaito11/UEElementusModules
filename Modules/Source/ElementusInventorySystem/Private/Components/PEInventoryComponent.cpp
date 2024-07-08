@@ -29,6 +29,45 @@ bool UPEInventoryComponent::CanGiveItem(const FElementusItemInfo InItemInfo) con
     return Super::CanGiveItem(InItemInfo) && !InItemInfo.Tags.HasTag(FGameplayTag::RequestGameplayTag(GlobalTag_EquipSlot_Base));
 }
 
+bool UPEInventoryComponent::AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags)
+{
+    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, FGameplayTagContainer::EmptyContainer))
+    {
+        FElementusItemInfo& ItemRef = GetItemReferenceAt(FoundInfoIndex);
+        ItemRef.Tags.AppendTags(Tags);
+        NotifyInventoryChange();
+        return true;
+    }
+    return false;
+}
+
+bool UPEInventoryComponent::RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags)
+{
+    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, Tags))
+    {
+        FElementusItemInfo& ItemRef = GetItemReferenceAt(FoundInfoIndex);
+        ItemRef.Tags.RemoveTags(Tags);
+        NotifyInventoryChange();
+        return true;
+    }
+    return false;
+}
+
+bool UPEInventoryComponent::RemoveTagsFromItems(const FGameplayTagContainer Tags)
+{
+    if (TArray<int32> OutIndexes; FindAllItemIndexesWithTags(Tags, OutIndexes, FGameplayTagContainer::EmptyContainer))
+    {
+        for (int32 Index : OutIndexes)
+        {
+            FElementusItemInfo& ItemRef = GetItemReferenceAt(Index);
+            ItemRef.Tags.RemoveTags(Tags);
+        }
+        NotifyInventoryChange();
+        return true;
+    }
+    return false;
+}
+
 void UPEInventoryComponent::EquipItem(const FElementusItemInfo& InItem)
 {
     if (TryEquipItem_Internal(InItem))
@@ -69,7 +108,7 @@ void UPEInventoryComponent::ApplyItemEffect(const TSubclassOf<UGameplayEffect> E
     ApplyItemEffect_Server(EffectClass);
 }
 
-UPEEquipment* UPEInventoryComponent::LoadEquipamentAsset(const FPrimaryElementusItemId& ItemId)
+UPEEquipment* UPEInventoryComponent::LoadEquipmentAsset(const FPrimaryElementusItemId& ItemId)
 {
     if (const UElementusItemData* const ItemData = UElementusInventoryFunctions::GetSingleItemDataById(ItemId, { "SoftData" }, false))
     {
@@ -78,7 +117,7 @@ UPEEquipment* UPEInventoryComponent::LoadEquipamentAsset(const FPrimaryElementus
 
     UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to load item %s"), *FString(__FUNCTION__), *ItemId.ToString())
 
-        return nullptr;
+    return nullptr;
 }
 
 bool UPEInventoryComponent::CheckInventoryAndItem(const FElementusItemInfo& InItem) const
@@ -121,7 +160,7 @@ bool UPEInventoryComponent::TryEquipItem_Internal(const FElementusItemInfo& InIt
         return false;
     }
 
-    if (UPEEquipment* const EquipedItem = LoadEquipamentAsset(InItem.ItemId))
+    if (UPEEquipment* const EquipedItem = LoadEquipmentAsset(InItem.ItemId))
     {
         const FGameplayTagContainer EquipmentSlotTags = EquipedItem->EquipmentSlotTags;
         if (int32 FoundTagIndex; FindFirstItemIndexWithTags(EquipmentSlotTags, FoundTagIndex, FGameplayTagContainer::EmptyContainer))
@@ -166,7 +205,7 @@ bool UPEInventoryComponent::TryUnequipItem_Internal(FElementusItemInfo& InItem)
         return false;
     }
 
-    if (UPEEquipment* const EquipedItem = LoadEquipamentAsset(InItem.ItemId))
+    if (UPEEquipment* const EquipedItem = LoadEquipmentAsset(InItem.ItemId))
     {
         ProcessEquipmentRemoval_Internal(Cast<ACharacter>(GetOwner()), EquipedItem);
 

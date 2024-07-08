@@ -49,16 +49,16 @@ void UPEGameSettings::ApplyPECustomSettings()
 void UPEGameSettings::ApplyNonResolutionSettings()
 {
     Super::ApplyNonResolutionSettings();
-    ApplyPECustomSettings();
+    SetToDefaults(); //force default settings
 }
 
 void UPEGameSettings::SetToDefaults()
 {
-    AntiAliasingMode = 1;
+    AntiAliasingMode = 2;
     bEnableTemporalUpscaling = true;
-    bEnableLumen = false;
+    bEnableLumen = true;
 
-    FSRMode = 2;
+    FSRMode = 3;
     bFSREnabled = IsFSREnabled();
 
     Super::SetToDefaults();

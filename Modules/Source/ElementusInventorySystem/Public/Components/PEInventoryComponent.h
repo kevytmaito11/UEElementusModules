@@ -27,6 +27,15 @@ public:
     virtual bool CanGiveItem(const FElementusItemInfo InItemInfo) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    bool AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags);
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    bool RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags);
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    bool RemoveTagsFromItems(const FGameplayTagContainer Tags);
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void EquipItem(const FElementusItemInfo& InItem);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
@@ -42,7 +51,7 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
     TMap<FGameplayTag, FElementusItemInfo> EquipmentMap;
 
-    UPEEquipment* LoadEquipamentAsset(const FPrimaryElementusItemId& ItemId);
+    UPEEquipment* LoadEquipmentAsset(const FPrimaryElementusItemId& ItemId);
 
     bool CheckInventoryAndItem(const FElementusItemInfo& InItem) const;
     class UPEAbilitySystemComponent* GetCharacterPEABSC(ACharacter* Character) const;
