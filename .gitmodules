@@ -4,8 +4,8 @@
 	branch = development
 [submodule "Dependencies/UEElementusInventory"]
 	path = Dependencies/UEElementusInventory
-	url = https://github.com/lucoiso/UEElementusInventory.git
-	branch = development
+	url = https://github.com/kevytmaito11/UEElementusInventory.git
+	branch = main
 [submodule "Dependencies/UEEOSSDKHandler"]
 	path = Dependencies/UEEOSSDKHandler
 	url = https://github.com/lucoiso/UEEOSSDKHandler.git
