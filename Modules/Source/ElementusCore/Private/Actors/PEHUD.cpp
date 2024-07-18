@@ -60,6 +60,22 @@ void APEHUD::BeginPlay()
     }
 }
 
+void APEHUD::HideWidget()
+{
+    if (HUDHandle.IsValid())
+    {
+        HUDHandle->RemoveFromParent();
+    }
+}
+
+void APEHUD::ShowWidget()
+{
+    if (HUDHandle.IsValid())
+    {
+        HUDHandle->AddToPlayerScreen();
+    }
+}
+
 #define REGISTER_ATTRIBUTE_DELEGATE(AttributeClass, AttributeName, ViewModelClass, ViewModelObject) \
 if (TargetABSC->GetGameplayAttributeValueChangeDelegate(AttributeClass::Get##AttributeName##Attribute()).IsBoundToObject(this)) \
 { \

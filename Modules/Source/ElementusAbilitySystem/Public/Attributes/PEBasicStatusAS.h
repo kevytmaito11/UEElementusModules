@@ -31,6 +31,11 @@ public:
     FGameplayAttributeData Damage;
     ATTRIBUTE_ACCESSORS(UPEBasicStatusAS, Damage)
 
+        /* A non-replicated attribute to handle stamina damage value inside GE Executions */
+        UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties")
+    FGameplayAttributeData StaminaDamage;
+    ATTRIBUTE_ACCESSORS(UPEBasicStatusAS, StaminaDamage)
+
         UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_Health)
     FGameplayAttributeData Health;
     ATTRIBUTE_ACCESSORS(UPEBasicStatusAS, Health)

@@ -94,6 +94,17 @@ void UPEBasicStatusAS::PostGameplayEffectExecute(const FGameplayEffectModCallbac
         }
     }
 
+    if (Data.EvaluatedData.Attribute == GetStaminaDamageAttribute())
+    {
+        const float DamageDone = GetStaminaDamage();
+        SetStaminaDamage(0.f);
+
+        if (DamageDone > 0.f)
+        {
+            SetStamina(FMath::Clamp(GetStamina() - DamageDone, 0.f, GetMaxStamina()));
+        }
+    }
+
     else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
     {
         SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));

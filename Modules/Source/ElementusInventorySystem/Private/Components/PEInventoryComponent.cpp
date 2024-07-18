@@ -29,40 +29,37 @@ bool UPEInventoryComponent::CanGiveItem(const FElementusItemInfo InItemInfo) con
     return Super::CanGiveItem(InItemInfo) && !InItemInfo.Tags.HasTag(FGameplayTag::RequestGameplayTag(GlobalTag_EquipSlot_Base));
 }
 
-bool UPEInventoryComponent::AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags)
+const FElementusItemInfo& UPEInventoryComponent::AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags)
 {
-    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, FGameplayTagContainer::EmptyContainer))
+    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, IgnoreTags))
     {
         FElementusItemInfo& ItemRef = GetItemReferenceAt(FoundInfoIndex);
         ItemRef.Tags.AppendTags(Tags);
-        NotifyInventoryChange();
-        return true;
+        return ItemRef;
     }
-    return false;
+    return InItem;
 }
 
-bool UPEInventoryComponent::RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags)
+const FElementusItemInfo& UPEInventoryComponent::RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags)
 {
-    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, Tags))
+    if (int32 FoundInfoIndex; FindFirstItemIndexWithInfo(InItem, FoundInfoIndex, IgnoreTags))
     {
         FElementusItemInfo& ItemRef = GetItemReferenceAt(FoundInfoIndex);
         ItemRef.Tags.RemoveTags(Tags);
-        NotifyInventoryChange();
-        return true;
+        return ItemRef;
     }
-    return false;
+    return InItem;
 }
 
-bool UPEInventoryComponent::RemoveTagsFromItems(const FGameplayTagContainer Tags)
+bool UPEInventoryComponent::RemoveTagsFromItems(const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags)
 {
-    if (TArray<int32> OutIndexes; FindAllItemIndexesWithTags(Tags, OutIndexes, FGameplayTagContainer::EmptyContainer))
+    if (TArray<int32> OutIndexes; FindAllItemIndexesWithTags(Tags, OutIndexes, IgnoreTags))
     {
         for (int32 Index : OutIndexes)
         {
             FElementusItemInfo& ItemRef = GetItemReferenceAt(Index);
             ItemRef.Tags.RemoveTags(Tags);
         }
-        NotifyInventoryChange();
         return true;
     }
     return false;

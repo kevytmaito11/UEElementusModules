@@ -24,6 +24,13 @@ public:
 
     virtual void BeginPlay() override;
 
+    /* Toggle HUD */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void HideWidget();
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void ShowWidget();
+
 protected:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
     TObjectPtr<UPEVM_AttributeBasic> BasicAttributes_VM;

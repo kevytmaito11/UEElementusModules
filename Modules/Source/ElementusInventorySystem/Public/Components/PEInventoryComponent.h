@@ -27,13 +27,13 @@ public:
     virtual bool CanGiveItem(const FElementusItemInfo InItemInfo) const override;
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-    bool AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags);
+    const FElementusItemInfo& AddTagsToItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-    bool RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags);
+    const FElementusItemInfo& RemoveTagsFromItem(const FElementusItemInfo& InItem, const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-    bool RemoveTagsFromItems(const FGameplayTagContainer Tags);
+    bool RemoveTagsFromItems(const FGameplayTagContainer Tags, const FGameplayTagContainer IgnoreTags);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void EquipItem(const FElementusItemInfo& InItem);

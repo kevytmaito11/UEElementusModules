@@ -77,7 +77,7 @@ void UPEAbilityFunctions::GiveAbilityWithoutBinding(UAbilitySystemComponent* Tar
 
 void UPEAbilityFunctions::GiveAbility(UAbilitySystemComponent* TargetABSC, const TSubclassOf<UGameplayAbility> Ability, const FName InputId, const UEnum* EnumerationClass, const bool bTryRemoveExistingAbilityWithInput = true, const bool bTryRemoveExistingAbilityWithClass = true)
 {
-    if (!TargetABSC->IsOwnerActorAuthoritative() || !IsValid(Ability))
+    if (!IsValid(TargetABSC) || !TargetABSC->IsOwnerActorAuthoritative() || !IsValid(Ability))
     {
         return;
     }

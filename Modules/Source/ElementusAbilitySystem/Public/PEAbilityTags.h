@@ -22,6 +22,7 @@ constexpr auto GlobalTag_SetByCallerFloat5 = "SetByCaller.Float5";
 
 #pragma region Effect
 constexpr auto GlobalTag_Damage = "Data.Damage";
+constexpr auto GlobalTag_StaminaDamage = "Data.StaminaDamage";
 #pragma endregion Effect
 
 #pragma region State

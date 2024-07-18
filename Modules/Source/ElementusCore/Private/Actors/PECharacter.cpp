@@ -108,6 +108,10 @@ void APECharacter::PossessedBy(AController* InController)
         // Not implemented yet
 
         // Initialize the ability system component that is stored by AI Controller
+        if (APEAIController* const AIController = Cast<APEAIController>(InController))
+		{
+			InitializeAbilitySystemComponent(AIController->GetAbilitySystemComponent(), AIController);
+		}
     }
 }
 
