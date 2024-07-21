@@ -42,6 +42,12 @@ public:
     void UnequipItem(FElementusItemInfo& InItem);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void EquipInterfaceItem(const FElementusItemInfo& InItem);
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void UnequipInterfaceItem(const FElementusItemInfo& InItem);
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void UnnequipAll(UAbilitySystemComponent* OwnerABSC = nullptr);
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
@@ -53,10 +59,24 @@ protected:
 
     UPEEquipment* LoadEquipmentAsset(const FPrimaryElementusItemId& ItemId);
 
+    UObject* LoadInterfaceEquipmentAsset(const FPrimaryElementusItemId& ItemId);
+
     bool CheckInventoryAndItem(const FElementusItemInfo& InItem) const;
     class UPEAbilitySystemComponent* GetCharacterPEABSC(ACharacter* Character) const;
 
 private:
+    bool TryEquipInterfaceItem_Internal(const FElementusItemInfo& InItem);
+    bool TryUnequipInterfaceItem_Internal(const FElementusItemInfo& InItem);
+
+    void ProcessEquipmentInterfaceAddition_Internal(ACharacter* OwningCharacter, UObject* Equipment);
+    void ProcessEquipmentInterfaceRemoval_Internal(ACharacter* OwningCharacter, UObject* Equipment);
+
+    UFUNCTION(Server, Reliable)
+    void AddEquipmentInterfaceGASData_Server(UPEAbilitySystemComponent* TargetABSC, UObject* Equipment);
+
+    UFUNCTION(Server, Reliable)
+    void RemoveEquipmentInterfaceGASData_Server(UPEAbilitySystemComponent* TargetABSC, UObject* Equipment);
+
     bool TryEquipItem_Internal(const FElementusItemInfo& InItem);
     bool TryUnequipItem_Internal(FElementusItemInfo& InItem);
 

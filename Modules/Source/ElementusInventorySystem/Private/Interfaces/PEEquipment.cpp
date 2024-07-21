@@ -9,3 +9,13 @@
 UPEEquipment::UPEEquipment(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 }
+
+TArray<FGameplayEffectGroupedData> UPEEquipment::GetEquipmentEffects()
+{
+    return EquipmentEffects;
+}
+
+FGameplayTagContainer UPEEquipment::GetEquipmentTags()
+{
+    return EquipmentSlotTags;
+}

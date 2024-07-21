@@ -7,6 +7,7 @@
 #include <CoreMinimal.h>
 #include <UObject/Object.h>
 #include "Effects/PEEffectData.h"
+#include "IPEEquipment.h"
 #include "PEEquipment.generated.h"
 
 class UGameplayAbility;
@@ -15,7 +16,7 @@ class UGameplayAbility;
  *
  */
 UCLASS(Abstract, Blueprintable, Category = "Project Elementus | Classes")
-class ELEMENTUSINVENTORYSYSTEM_API UPEEquipment : public UObject
+class ELEMENTUSINVENTORYSYSTEM_API UPEEquipment : public UObject, public IIPEEquipment
 {
     GENERATED_BODY()
 
@@ -36,4 +37,10 @@ public:
 
     UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
     FName SocketToAttach = NAME_None;
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual TArray<FGameplayEffectGroupedData> GetEquipmentEffects() override;
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual FGameplayTagContainer GetEquipmentTags() override;
 };

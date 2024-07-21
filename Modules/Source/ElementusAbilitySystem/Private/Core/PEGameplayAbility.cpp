@@ -507,6 +507,15 @@ void UPEGameplayAbility::RemoveCooldownEffect(UAbilitySystemComponent* SourceAbi
     }
 }
 
+void UPEGameplayAbility::RemoveCostEffect(UAbilitySystemComponent* SourceAbilitySystem) const
+{
+    if (IsValid(GetCostGameplayEffect()))
+    {
+        PEUE_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cost from actor %s."), *GetName(), *OwningActorName.ToString());
+        SourceAbilitySystem->RemoveActiveGameplayEffectBySourceEffect(CostGameplayEffectClass, SourceAbilitySystem);
+    }
+}
+
 void UPEGameplayAbility::PlayAbilitySoundAttached(USceneComponent* InComponent, const FName SocketToAttach, const FVector InLocation)
 {
     if (!IsValid(AbilitySoundData.AbilitySoundFX))

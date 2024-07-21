@@ -26,8 +26,14 @@ void UPELevelingAS::PostAttributeChange(const FGameplayAttribute& Attribute, con
 
     if (Attribute == GetCurrentExperienceAttribute() && NewValue >= GetRequiredExperience())
     {
-        UAbilitySystemComponent* const AbilityComp = GetOwningAbilitySystemComponentChecked();
+        const float NewExperience = GetCurrentExperience() - GetRequiredExperience();
+        SetCurrentLevel(GetCurrentLevel() + 1);
+        SetCurrentExperience(NewExperience);
+    }
 
+    if (Attribute == GetCurrentLevelAttribute())
+    {
+        UAbilitySystemComponent* const AbilityComp = GetOwningAbilitySystemComponentChecked();
         // This block will verify if the leveling bonus table exists and modify
         // the attributes accordingly the current (new) level
         if (const UPEAbilitySystemSettings* const ProjectSettings = UPEAbilitySystemSettings::Get(); !ProjectSettings->LevelingBonusAttributeMetadata.IsNull())
@@ -47,11 +53,7 @@ void UPELevelingAS::PostAttributeChange(const FGameplayAttribute& Attribute, con
             AbilityComp->ApplyModToAttribute(UPECustomStatusAS::GetAttackRateAttribute(), EGameplayModOp::Additive, LevelingInfo->BonusAttackRate);
             AbilityComp->ApplyModToAttribute(UPECustomStatusAS::GetDefenseRateAttribute(), EGameplayModOp::Additive, LevelingInfo->BonusDefenseRate);
 
-            const float NewExperience = GetCurrentExperience() - GetRequiredExperience();
-
             SetRequiredExperience(LevelingInfo->RequiredExp);
-            SetCurrentLevel(GetCurrentLevel() + 1);
-            SetCurrentExperience(NewExperience);
         }
     }
 }

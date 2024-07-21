@@ -298,6 +298,10 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void RemoveCooldownEffect(UAbilitySystemComponent* SourceAbilitySystem) const;
 
+    /* Remove the cost effect */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void RemoveCostEffect(UAbilitySystemComponent* SourceAbilitySystem) const;
+
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void PlayAbilitySoundAttached(USceneComponent* InComponent, const FName SocketToAttach = NAME_None, const FVector InLocation = FVector::ZeroVector);
 

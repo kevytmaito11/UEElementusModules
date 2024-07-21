@@ -3,6 +3,7 @@
 // Repo: https://github.com/lucoiso/UEProject_Elementus
 
 #include "Components/PEInventoryComponent.h"
+#include "Interfaces/IPEEquipment.h"
 #include "Interfaces/PEEquipment.h"
 #include "LogElementusInventorySystem.h"
 #include <Core/PEAbilitySystemComponent.h>
@@ -81,6 +82,22 @@ void UPEInventoryComponent::UnequipItem(FElementusItemInfo& InItem)
     }
 }
 
+void UPEInventoryComponent::EquipInterfaceItem(const FElementusItemInfo& InItem)
+{
+    if (TryEquipInterfaceItem_Internal(InItem))
+    {
+        NotifyInventoryChange();
+    }
+}
+
+void UPEInventoryComponent::UnequipInterfaceItem(const FElementusItemInfo& InItem)
+{
+    if (TryUnequipInterfaceItem_Internal(InItem))
+    {
+        NotifyInventoryChange();
+    }
+}
+
 void UPEInventoryComponent::UnnequipAll(UAbilitySystemComponent* OwnerABSC)
 {
     if (EquipmentMap.IsEmpty())
@@ -110,6 +127,22 @@ UPEEquipment* UPEInventoryComponent::LoadEquipmentAsset(const FPrimaryElementusI
     if (const UElementusItemData* const ItemData = UElementusInventoryFunctions::GetSingleItemDataById(ItemId, { "SoftData" }, false))
     {
         return Cast<UPEEquipment>(ItemData->ItemClass.LoadSynchronous()->GetDefaultObject());
+    }
+
+    UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to load item %s"), *FString(__FUNCTION__), *ItemId.ToString())
+
+    return nullptr;
+}
+
+UObject* UPEInventoryComponent::LoadInterfaceEquipmentAsset(const FPrimaryElementusItemId& ItemId)
+{
+    if (const UElementusItemData* const ItemData = UElementusInventoryFunctions::GetSingleItemDataById(ItemId, { "SoftData" }, false))
+    {
+        UObject* LoadedObject = ItemData->ItemClass.LoadSynchronous()->GetDefaultObject();
+        if (LoadedObject->Implements<UIPEEquipment>())
+        {
+            return LoadedObject;
+        }
     }
 
     UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to load item %s"), *FString(__FUNCTION__), *ItemId.ToString())
@@ -148,6 +181,100 @@ UPEAbilitySystemComponent* UPEInventoryComponent::GetCharacterPEABSC(ACharacter*
     }
 
     return nullptr;
+}
+
+bool UPEInventoryComponent::TryEquipInterfaceItem_Internal(const FElementusItemInfo& InItem)
+{
+    if (!CheckInventoryAndItem(InItem))
+    {
+        return false;
+    }
+
+    if (UObject* const EquipedItem = LoadInterfaceEquipmentAsset(InItem.ItemId))
+    {
+        IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(EquipedItem);
+        if (EquippedInterface)
+        {
+            const FGameplayTagContainer EquipmentSlotTags = EquippedInterface->GetEquipmentTags();
+            ProcessEquipmentInterfaceAddition_Internal(Cast<ACharacter>(GetOwner()), EquipedItem);
+        }
+        UElementusInventoryFunctions::UnloadElementusItem(InItem.ItemId);
+    }
+
+    return false;
+}
+
+bool UPEInventoryComponent::TryUnequipInterfaceItem_Internal(const FElementusItemInfo& InItem)
+{
+    if (!CheckInventoryAndItem(InItem))
+    {
+        return false;
+    }
+
+    if (UObject* const EquipedItem = LoadInterfaceEquipmentAsset(InItem.ItemId))
+    {
+        IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(EquipedItem);
+        if (EquippedInterface)
+        {
+            const FGameplayTagContainer EquipmentSlotTags = EquippedInterface->GetEquipmentTags();
+            ProcessEquipmentInterfaceRemoval_Internal(Cast<ACharacter>(GetOwner()), EquipedItem);
+        }
+        UElementusInventoryFunctions::UnloadElementusItem(InItem.ItemId);
+    }
+
+    return false;
+}
+
+void UPEInventoryComponent::ProcessEquipmentInterfaceAddition_Internal(ACharacter* OwningCharacter, UObject* Equipment)
+{
+    if (UPEAbilitySystemComponent* const TargetABSC = GetCharacterPEABSC(OwningCharacter))
+    {
+        IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(Equipment);
+        if (EquippedInterface)
+        {
+            AddEquipmentInterfaceGASData_Server(TargetABSC, Equipment);
+            TargetABSC->AddLooseGameplayTags(EquippedInterface->GetEquipmentTags());
+        }
+    }
+}
+
+void UPEInventoryComponent::ProcessEquipmentInterfaceRemoval_Internal(ACharacter* OwningCharacter, UObject* Equipment)
+{
+    if (UPEAbilitySystemComponent* const TargetABSC = GetCharacterPEABSC(OwningCharacter))
+    {
+        IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(Equipment);
+        if (EquippedInterface)
+        {
+            RemoveEquipmentInterfaceGASData_Server(TargetABSC, Equipment);
+            TargetABSC->RemoveLooseGameplayTags(EquippedInterface->GetEquipmentTags());
+        }
+    }
+}
+
+void UPEInventoryComponent::AddEquipmentInterfaceGASData_Server_Implementation(UPEAbilitySystemComponent* TargetABSC, UObject* Equipment)
+{
+    IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(Equipment);
+    if (EquippedInterface)
+    {
+        // Add equipment effects
+        for (const FGameplayEffectGroupedData& Effect : EquippedInterface->GetEquipmentEffects())
+        {
+            TargetABSC->ApplyEffectGroupedDataToSelf(Effect);
+        }
+    }
+}
+
+void UPEInventoryComponent::RemoveEquipmentInterfaceGASData_Server_Implementation(UPEAbilitySystemComponent* TargetABSC, UObject* Equipment)
+{
+    IIPEEquipment* EquippedInterface = Cast<IIPEEquipment>(Equipment);
+    if (EquippedInterface)
+    {
+        // Remove equipment effects
+        for (const FGameplayEffectGroupedData& Effect : EquippedInterface->GetEquipmentEffects())
+        {
+            TargetABSC->RemoveEffectGroupedDataFromSelf(Effect, TargetABSC, 1);
+        }
+    }
 }
 
 bool UPEInventoryComponent::TryEquipItem_Internal(const FElementusItemInfo& InItem)
