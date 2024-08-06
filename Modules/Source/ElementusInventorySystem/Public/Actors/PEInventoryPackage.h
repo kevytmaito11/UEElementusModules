@@ -20,7 +20,7 @@ class ELEMENTUSINVENTORYSYSTEM_API APEInventoryPackage : public AElementusInvent
 public:
     explicit APEInventoryPackage(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-    UPROPERTY(EditDefaultsOnly, Category = "Project Elementus | Properties")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Project Elementus | Properties")
     TObjectPtr<UStaticMeshComponent> PackageMesh;
 
 protected:

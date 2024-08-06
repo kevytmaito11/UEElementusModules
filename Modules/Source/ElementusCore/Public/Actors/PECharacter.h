@@ -89,6 +89,9 @@ protected:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
+    bool RagdollAfterDeath = true;
+
     /* Init a death state with this character */
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     void PerformDeath();
@@ -122,7 +125,7 @@ private:
     void Multicast_DeathSetup();
 
     UFUNCTION(Server, Reliable)
-    void Server_SpawnInventoryPackage();
+    virtual void Server_SpawnInventoryPackage();
 
     virtual void Landed(const FHitResult& Hit) override;
 

@@ -358,13 +358,30 @@ void UPEInventoryComponent::ProcessEquipmentAddition_Internal(ACharacter* Owning
         TargetABSC->AddLooseGameplayTags(Equipment->EquipmentSlotTags);
     }
 
+    USkeletalMeshComponent* TargetMesh = OwningCharacter->GetMesh();
+
+    TArray<USkeletalMeshComponent*> SkeletalMeshComponents;
+    OwningCharacter->GetComponents<USkeletalMeshComponent>(SkeletalMeshComponents);
+
+    for (USkeletalMeshComponent* SkeletalMeshComponent : SkeletalMeshComponents)
+    {
+        // Check if the component has the specified tag
+        if (SkeletalMeshComponent->ComponentHasTag(Equipment->SkeletonTag))
+        {
+            // Found the skeletal mesh component with the tag
+            UE_LOG(LogElementusInventorySystem_Internal, Log, TEXT("Found SkeletalMeshComponent with tag: %s"), *Equipment->SkeletonTag.ToString());
+
+            TargetMesh = SkeletalMeshComponent;
+        }
+    }
+
     if (GetOwnerRole() == ROLE_Authority)
     {
-        ProcessEquipmentAttachment_Multicast(OwningCharacter->GetMesh(), Equipment);
+        ProcessEquipmentAttachment_Multicast(TargetMesh, Equipment);
     }
     else
     {
-        ProcessEquipmentAttachment_Server(OwningCharacter->GetMesh(), Equipment);
+        ProcessEquipmentAttachment_Server(TargetMesh, Equipment);
     }
 }
 
@@ -466,7 +483,14 @@ void UPEInventoryComponent::ProcessEquipmentAttachment_Multicast_Implementation(
 
     if (!InMesh->AttachToComponent(TargetMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, Equipment->SocketToAttach))
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to attach mesh to character"), *FString(__FUNCTION__));
+        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to attach mesh to character"), *FString(__func__));
+    }
+    else
+    {
+        if (Equipment->SetLeaderPose)
+        {
+            InMesh->SetLeaderPoseComponent(TargetMesh);
+        }
     }
 
     GetOwner()->FinishAndRegisterComponent(InMesh);

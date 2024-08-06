@@ -38,6 +38,12 @@ public:
     UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
     FName SocketToAttach = NAME_None;
 
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    FName SkeletonTag = NAME_None;
+
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    bool SetLeaderPose = false;
+
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     virtual TArray<FGameplayEffectGroupedData> GetEquipmentEffects() override;
 

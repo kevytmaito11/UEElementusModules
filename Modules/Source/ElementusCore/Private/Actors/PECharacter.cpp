@@ -214,7 +214,7 @@ void APECharacter::BeginPlay()
         }
     );
 
-    constexpr float InitializationDelay = 1.f;
+    constexpr float InitializationDelay = 2.f;
 
     FTimerHandle TimerHandle;
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, InitializationDelay, false);
@@ -297,7 +297,7 @@ void APECharacter::Multicast_DeathSetup_Implementation()
         GetCapsuleComponent()->SetCollisionProfileName(TEXT("NoCollision"));
     }
 
-    if (IsValid(GetMesh()))
+    if (RagdollAfterDeath && IsValid(GetMesh()))
     {
         GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
         GetMesh()->SetAllBodiesBelowSimulatePhysics(NAME_None, true, true);
