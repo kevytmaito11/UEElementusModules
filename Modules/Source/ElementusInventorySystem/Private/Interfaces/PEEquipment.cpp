@@ -19,3 +19,8 @@ FGameplayTagContainer UPEEquipment::GetEquipmentTags()
 {
     return EquipmentSlotTags;
 }
+
+TMap<FName, TSubclassOf<UGameplayAbility>> UPEEquipment::GetEquipmentAbilities()
+{
+    return EquipmentAbilities;
+}

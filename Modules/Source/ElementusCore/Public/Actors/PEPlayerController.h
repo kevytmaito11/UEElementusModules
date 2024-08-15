@@ -52,7 +52,7 @@ struct FPendingAbilityInputData
 /**
  *
  */
-UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
+UCLASS(Blueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSCORE_API APEPlayerController : public APlayerController, public IMFEA_AbilityInputBinding, public IPEElementusInventoryProcessor, public IAbilitySystemInterface
 {
     GENERATED_BODY()

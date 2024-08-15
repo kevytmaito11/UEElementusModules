@@ -10,3 +10,8 @@ FGameplayTagContainer IIPEEquipment::GetEquipmentTags()
 {
 	return FGameplayTagContainer();
 }
+
+TMap<FName, TSubclassOf<UGameplayAbility>> IIPEEquipment::GetEquipmentAbilities()
+{
+	return TMap<FName, TSubclassOf<UGameplayAbility>>();
+}

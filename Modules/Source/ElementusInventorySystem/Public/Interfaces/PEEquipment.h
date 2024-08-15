@@ -49,4 +49,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
     virtual FGameplayTagContainer GetEquipmentTags() override;
+
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual TMap<FName, TSubclassOf<UGameplayAbility>> GetEquipmentAbilities() override;
 };

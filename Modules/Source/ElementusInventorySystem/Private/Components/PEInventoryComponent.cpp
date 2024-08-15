@@ -261,6 +261,26 @@ void UPEInventoryComponent::AddEquipmentInterfaceGASData_Server_Implementation(U
         {
             TargetABSC->ApplyEffectGroupedDataToSelf(Effect);
         }
+
+        UEnum* const InputIdEnum = UMFEA_Settings::Get()->InputIDEnumeration.LoadSynchronous();
+
+        // Add equipment abilities
+        for (const auto& [InInputID_Name, InAbilityClass] : EquippedInterface->GetEquipmentAbilities())
+        {
+            if (InInputID_Name.IsNone())
+            {
+                UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__FUNCTION__));
+            }
+
+            if (!IsValid(InAbilityClass))
+            {
+                UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__FUNCTION__));
+                continue;
+            }
+
+            UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Binding ability %s with InputId %s"), *FString(__FUNCTION__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
+            UPEAbilityFunctions::GiveAbility(TargetABSC, InAbilityClass, InInputID_Name, InputIdEnum, false, true);
+        }
     }
 }
 
@@ -273,6 +293,25 @@ void UPEInventoryComponent::RemoveEquipmentInterfaceGASData_Server_Implementatio
         for (const FGameplayEffectGroupedData& Effect : EquippedInterface->GetEquipmentEffects())
         {
             TargetABSC->RemoveEffectGroupedDataFromSelf(Effect, TargetABSC, 1);
+        }
+
+        // Remove equipment abilities
+        for (const auto& [InInputID_Name, InAbilityClass] : EquippedInterface->GetEquipmentAbilities())
+        {
+            if (InInputID_Name.IsNone())
+            {
+                UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__FUNCTION__));
+                continue;
+            }
+
+            if (!IsValid(InAbilityClass))
+            {
+                UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__FUNCTION__));
+                continue;
+            }
+
+            UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Removing ability %s with InputId %s"), *FString(__FUNCTION__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
+            UPEAbilityFunctions::RemoveAbility(TargetABSC, InAbilityClass);
         }
     }
 }

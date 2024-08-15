@@ -86,10 +86,6 @@ void UPEAbilityFunctions::GiveAbility(UAbilitySystemComponent* TargetABSC, const
     {
         // If can't find the input value, will cancel the ability addition
         const uint32 InputID = EnumerationClass->GetValueByName(InputId, EGetByNameFlags::CheckAuthoredName);
-        if (InputID == INDEX_NONE)
-        {
-            return;
-        }
 
         const auto RemoveAbility_Lambda = [&](const FGameplayAbilitySpec* const& AbilitySpec) -> void
             {

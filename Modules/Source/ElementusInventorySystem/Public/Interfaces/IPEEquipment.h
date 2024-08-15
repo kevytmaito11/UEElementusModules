@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "Effects/PEEffectData.h"
+#include <Abilities/GameplayAbility.h>
 #include "IPEEquipment.generated.h"
 
 // This class does not need to be modified.
@@ -28,4 +29,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
 	virtual FGameplayTagContainer GetEquipmentTags();
+
+	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+	virtual TMap<FName, TSubclassOf<UGameplayAbility>> GetEquipmentAbilities();
 };
