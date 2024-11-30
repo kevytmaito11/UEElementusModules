@@ -26,6 +26,15 @@ class ELEMENTUSABILITYSYSTEM_API UPEAttributeBase : public UAttributeSet
 public:
     explicit UPEAttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    TArray<FGameplayAttribute> GetAllAttributesFromOwner() const;
+
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    FGameplayAttribute GetAttributeByName(const FString& AttributeName) const;
+
+    UFUNCTION(BlueprintCallable, Category = "Gameplay Tags")
+    FGameplayTag CreateSetByCallerTag(const FGameplayAttribute& Attribute) const;
+
 protected:
     virtual void InitFromMetaDataTable(const UDataTable* DataTable);
 
