@@ -46,7 +46,7 @@ protected:
     TSubclassOf<UUserWidget> HUDClass;
 
     UFUNCTION()
-    virtual void InitializeAttributeViewModels();
+    virtual void InitializeAttributeViewModels(APECharacter* PECharacter);
 
     virtual void OnViewModelAttributeChange(const struct FOnAttributeChangeData& AttributeChangeData);
     void NotifyAttributeChange(const struct FGameplayAttribute& Attribute, const float& NewValue);

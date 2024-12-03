@@ -10,7 +10,7 @@
 #include <GameFramework/Character.h>
 #include "PECharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterInit);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterInit, APECharacter*, InitializedCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDeath);
 
 class UPEEquipment;

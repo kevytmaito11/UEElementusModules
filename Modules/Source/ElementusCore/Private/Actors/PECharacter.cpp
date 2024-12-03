@@ -209,12 +209,12 @@ void APECharacter::BeginPlay()
             if (IsValid(this))
             {
                 Server_InitializeCharacter();
-                OnCharacterInit.Broadcast();
+                OnCharacterInit.Broadcast(this);
             }
         }
     );
 
-    constexpr float InitializationDelay = 2.f;
+    constexpr float InitializationDelay = 1.f;
 
     FTimerHandle TimerHandle;
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, InitializationDelay, false);

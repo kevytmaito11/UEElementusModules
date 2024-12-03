@@ -87,7 +87,7 @@ TargetABSC->GetGameplayAttributeValueChangeDelegate(AttributeClass::Get##Attribu
 	NotifyAttributeChange(AttributeClass::Get##AttributeName##Attribute(), TargetABSC->GetNumericAttribute(AttributeClass::Get##AttributeName##Attribute())); \
 }
 
-void APEHUD::InitializeAttributeViewModels()
+void APEHUD::InitializeAttributeViewModels(APECharacter* PECharacter)
 {
     UE_LOG(LogElementusCore_Internal, Display, TEXT("%s - Initializing attribute view models"), *FString(__FUNCTION__));
 
