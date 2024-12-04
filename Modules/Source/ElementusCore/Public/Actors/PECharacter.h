@@ -89,6 +89,10 @@ protected:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
+    /* Metadata for unique traits or affiliations */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus | Properties")
+    FGameplayTagContainer CharacterTraits;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
     bool RagdollAfterDeath = true;
 

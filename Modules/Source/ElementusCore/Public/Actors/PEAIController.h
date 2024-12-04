@@ -13,6 +13,7 @@
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Touch.h"
+#include "PECharacter.h"
 #include "PEAIController.generated.h"
 
 /**
@@ -39,6 +40,13 @@ class ELEMENTUSCORE_API APEAIController : public AAIController, public IAbilityS
 
 public:
     explicit APEAIController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	UFUNCTION(BlueprintCallable, Category = "AI | Detection")
+	APECharacter* GetDetectedActorByTrait(const FGameplayTag& Trait) const;
+
+	UFUNCTION(BlueprintCallable, Category = "AI | Detection")
+	APECharacter* GetClosestActorWithDifferentTrait() const;
+
 
 private:
     void DeathStateChanged_Callback(const FGameplayTag CallbackTag, const int32 NewCount) const;
@@ -78,4 +86,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI Perception")
 	AActor* TouchedActor;
+
+private:
+	// Map of detected actors grouped by traits
+	TMap<FGameplayTag, APECharacter*> DetectedActors;
+
 };

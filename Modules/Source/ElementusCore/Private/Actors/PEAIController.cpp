@@ -112,9 +112,94 @@ void APEAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
                 {
                     TouchedActor = Actor;
                 }
+
+                // Try to cast the actor to APECharacter
+                APECharacter* DetectedCharacter = Cast<APECharacter>(Actor);
+                if (!DetectedCharacter)
+                {
+                    continue; // Skip if it's not a valid APECharacter
+                }
+
+                // Iterate through the detected character's traits
+                for (const FGameplayTag& Trait : DetectedCharacter->CharacterTraits)
+                {
+                    // Replace the existing character if the trait is already in the map
+                    if (DetectedActors.Contains(Trait))
+                    {
+                        DetectedActors[Trait] = DetectedCharacter;
+                    }
+                    else
+                    {
+                        // Add the new character if the trait is not in the map
+                        DetectedActors.Add(Trait, DetectedCharacter);
+                    }
+                }
             }
         }
     }
+}
+
+APECharacter* APEAIController::GetDetectedActorByTrait(const FGameplayTag& Trait) const
+{
+    if (DetectedActors.Contains(Trait))
+    {
+        return DetectedActors[Trait];
+    }
+    return nullptr; // No actor detected with this trait
+}
+
+APECharacter* APEAIController::GetClosestActorWithDifferentTrait() const
+{
+    // Get the owner character
+    APECharacter* SelfCharacter = Cast<APECharacter>(GetPawn());
+    if (!SelfCharacter)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Owner character is not a valid APECharacter."));
+        return nullptr;
+    }
+
+    FVector SelfLocation = SelfCharacter->GetActorLocation();
+    FGameplayTagContainer SelfTraits = SelfCharacter->CharacterTraits;
+
+    APECharacter* ClosestActor = nullptr;
+    float MinDistance = MAX_FLT;
+
+    for (const auto& Pair : DetectedActors)
+    {
+        const FGameplayTag& Trait = Pair.Key;
+        APECharacter* DetectedCharacter = Pair.Value;
+
+        // Check if the detected actor shares any traits with the self-character
+        bool SharesTrait = false;
+
+        if (DetectedCharacter)
+        {
+            for (const FGameplayTag& DetectedTrait : DetectedCharacter->CharacterTraits)
+            {
+                if (SelfTraits.HasTag(DetectedTrait))
+                {
+                    SharesTrait = true;
+                    break; // Stop checking further traits
+                }
+            }
+
+            // Skip the actor if it shares any traits with the self-character
+            if (SharesTrait)
+            {
+                continue;
+            }
+
+            // Calculate the distance
+            float Distance = FVector::Dist(SelfLocation, DetectedCharacter->GetActorLocation());
+            if (Distance < MinDistance)
+            {
+                MinDistance = Distance;
+                ClosestActor = DetectedCharacter;
+            }
+        }
+    }
+
+    return ClosestActor;
 }
 
 UAbilitySystemComponent* APEAIController::GetAbilitySystemComponent() const
