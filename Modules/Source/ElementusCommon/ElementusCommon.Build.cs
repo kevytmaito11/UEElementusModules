@@ -13,7 +13,8 @@ public class ElementusCommon : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new[]
         {
-            "Core"
+            "Core",
+            "GameplayTags"
         });
 
         PrivateDependencyModuleNames.AddRange(new[]

@@ -22,7 +22,7 @@ class ELEMENTUSACTORS_API APEConsumableActor : public AActor, public IPEInteract
 public:
     explicit APEConsumableActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-    virtual void DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult) override;
+    virtual void DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult, const FGameplayTagContainer& InteractionTags) override;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
     bool bDestroyAfterConsumption;

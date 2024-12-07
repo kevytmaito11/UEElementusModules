@@ -54,7 +54,7 @@ void APEConsumableActor::PerformConsumption(UAbilitySystemComponent* TargetABSC)
     }
 }
 
-void APEConsumableActor::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult)
+void APEConsumableActor::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult, const FGameplayTagContainer& InteractionTags)
 {
     if (GetLocalRole() != ROLE_Authority)
     {

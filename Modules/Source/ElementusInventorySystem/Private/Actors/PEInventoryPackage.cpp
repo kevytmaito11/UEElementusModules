@@ -65,7 +65,7 @@ bool APEInventoryPackage::IsInteractEnabled_Implementation() const
     return true;
 }
 
-void APEInventoryPackage::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult)
+void APEInventoryPackage::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult, const FGameplayTagContainer& InteractionTags)
 {
     if (GetLocalRole() == ROLE_Authority)
     {

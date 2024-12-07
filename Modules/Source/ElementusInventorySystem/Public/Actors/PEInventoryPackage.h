@@ -29,7 +29,7 @@ protected:
     virtual void SetIsCurrentlyFocusedByActor_Implementation(const bool bIsFocused, AActor* ActorFocusing, const FHitResult& HitResult) override;
 
     virtual bool IsInteractEnabled_Implementation() const override;
-    virtual void DoInteractionBehavior_Implementation(class ACharacter* CharacterInteracting, const FHitResult& HitResult) override;
+    virtual void DoInteractionBehavior_Implementation(class ACharacter* CharacterInteracting, const FHitResult& HitResults, const FGameplayTagContainer& InteractionTags) override;
 
     TArray<uint32> FocusIDs;
 };
