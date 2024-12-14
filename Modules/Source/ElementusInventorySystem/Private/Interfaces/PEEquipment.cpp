@@ -24,3 +24,12 @@ TMap<FName, TSubclassOf<UGameplayAbility>> UPEEquipment::GetEquipmentAbilities()
 {
     return EquipmentAbilities;
 }
+
+void UPEEquipment::AddEquipmentTag(const FGameplayTag& NewTag)
+{
+    // Add the new tag to the EquipmentSlotTags container
+    if (!EquipmentSlotTags.HasTag(NewTag))
+    {
+        EquipmentSlotTags.AddTag(NewTag);
+    }
+}

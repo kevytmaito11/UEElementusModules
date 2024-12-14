@@ -15,3 +15,7 @@ TMap<FName, TSubclassOf<UGameplayAbility>> IIPEEquipment::GetEquipmentAbilities(
 {
 	return TMap<FName, TSubclassOf<UGameplayAbility>>();
 }
+
+void IIPEEquipment::AddEquipmentTag(const FGameplayTag& NewTag)
+{
+}

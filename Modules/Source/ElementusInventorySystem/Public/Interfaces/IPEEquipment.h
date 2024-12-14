@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,7 +14,7 @@ class ELEMENTUSINVENTORYSYSTEM_API UIPEEquipment : public UInterface
 };
 
 /**
- * 
+ *
  */
 class ELEMENTUSINVENTORYSYSTEM_API IIPEEquipment
 {
@@ -32,4 +30,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
 	virtual TMap<FName, TSubclassOf<UGameplayAbility>> GetEquipmentAbilities();
+
+	/** Adds a new equipment tag to the equipment */
+	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+	virtual void AddEquipmentTag(const FGameplayTag& NewTag);
 };

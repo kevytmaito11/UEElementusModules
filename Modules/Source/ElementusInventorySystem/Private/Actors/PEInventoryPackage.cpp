@@ -72,7 +72,7 @@ void APEInventoryPackage::DoInteractionBehavior_Implementation(ACharacter* Chara
         SetNetDormancy(ENetDormancy::DORM_Awake);
     }
 
-    if (!CharacterInteracting->IsLocallyControlled())
+    if (!IsValid(CharacterInteracting) || !CharacterInteracting->IsLocallyControlled())
     {
         return;
     }

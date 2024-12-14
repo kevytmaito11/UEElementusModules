@@ -172,7 +172,7 @@ APECharacter* APEAIController::GetClosestActorWithDifferentTrait() const
         // Check if the detected actor shares any traits with the self-character
         bool SharesTrait = false;
 
-        if (DetectedCharacter)
+        if (IsValid(DetectedCharacter))
         {
             for (const FGameplayTag& DetectedTrait : DetectedCharacter->CharacterTraits)
             {

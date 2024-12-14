@@ -52,8 +52,11 @@ void UPEDamageGEC::Execute_Implementation(const FGameplayEffectCustomExecutionPa
     EvaluationParameters.TargetTags = TargetTags;
 
     float BaseDamage = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetAttributesStatics().DamageDef, EvaluationParameters, BaseDamage);
-    BaseDamage += FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(GlobalTag_Damage), false, -1.0f), 0.0f);
+    bool bHasBaseDamage = ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetAttributesStatics().DamageDef, EvaluationParameters, BaseDamage);
+    if (!bHasBaseDamage)
+    {
+        BaseDamage = FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(GlobalTag_Damage), false, -1.0f), 0.0f);
+    }
 
     float AttackRate = 0.f;
     ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetAttributesStatics().AttackRateDef, EvaluationParameters, AttackRate);
@@ -64,11 +67,19 @@ void UPEDamageGEC::Execute_Implementation(const FGameplayEffectCustomExecutionPa
     DefenseRate = FMath::Max<float>(DefenseRate, 0.0f);
 
     float BaseStaminaDamage = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetAttributesStatics().StaminaDamageDef, EvaluationParameters, BaseStaminaDamage);
-    BaseStaminaDamage += FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(GlobalTag_StaminaDamage), false, -1.0f), 0.0f);
+    bool bHasBaseStaminaDamage = ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetAttributesStatics().StaminaDamageDef, EvaluationParameters, BaseStaminaDamage);
+    if (!bHasBaseStaminaDamage)
+    {
+        BaseStaminaDamage = FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(GlobalTag_StaminaDamage), false, -1.0f), 0.0f);
+    }
 
     const auto CalculateDamage = [&BaseDamage, &AttackRate, &DefenseRate]() -> float
         {
+            if (DefenseRate == 0.0f) // Avoid division by zero
+            {
+                return 0.0f;
+            }
+
             float DamageDone = BaseDamage * AttackRate / DefenseRate;
 
             if (DamageDone < 0.f)
@@ -81,11 +92,23 @@ void UPEDamageGEC::Execute_Implementation(const FGameplayEffectCustomExecutionPa
 
     const auto CalculateStaminaDamage = [&BaseStaminaDamage, &AttackRate, &DefenseRate]() -> float
         {
+            if (DefenseRate == 0.0f) // Avoid division by zero
+            {
+                return 0.0f;
+            }
+
             float StaminaDone = BaseStaminaDamage * AttackRate / DefenseRate;
 
             return StaminaDone;
         };
 
-    OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(GetAttributesStatics().DamageProperty, EGameplayModOp::Additive, CalculateDamage()));
-    OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(GetAttributesStatics().StaminaDamageProperty, EGameplayModOp::Additive, CalculateStaminaDamage()));
+    if (bHasBaseDamage) // Add output only if the attribute exists
+    {
+        OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(GetAttributesStatics().DamageProperty, EGameplayModOp::Additive, CalculateDamage()));
+    }
+
+    if (bHasBaseStaminaDamage) // Add output only if the attribute exists
+    {
+        OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(GetAttributesStatics().StaminaDamageProperty, EGameplayModOp::Additive, CalculateStaminaDamage()));
+    }
 }
