@@ -394,7 +394,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 {
     if (SourceAbilitySystem == nullptr)
     {
-        SourceAbilitySystem = GetAbilitySystemComponentFromActorInfo_Checked();
+        SourceAbilitySystem = GetAbilitySystemComponentFromActorInfo_Ensured();
     }
 
     if (GameplayCueTag.IsValid())
@@ -616,7 +616,7 @@ void UPEGameplayAbility::ActivateWaitTargetDataTask(const TEnumAsByte<EGameplayT
     // If Targeting is different than Instant, add the aiming tag and start waiting for confirmation
     if (AbilityTask_WaitTargetData->IsActive() && TargetingConfirmation != EGameplayTargetingConfirmation::Instant)
     {
-        UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Checked();
+        UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Ensured();
 
         Comp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(GlobalTag_AimingState));
         Comp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(GlobalTag_WaitingConfirmationState));
@@ -629,7 +629,7 @@ void UPEGameplayAbility::ActivateWaitTargetDataTask(const TEnumAsByte<EGameplayT
 void UPEGameplayAbility::ActivateWaitConfirmInputTask()
 {
     // Add extra tag to the ability system component to tell that we are waiting for confirm input
-    UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Checked();
+    UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Ensured();
     if (!AbilityExtraTags.HasTag(FGameplayTag::RequestGameplayTag(GlobalTag_WaitingConfirmationState)))
     {
         Comp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(GlobalTag_WaitingConfirmationState));
@@ -653,7 +653,7 @@ void UPEGameplayAbility::ActivateWaitConfirmInputTask()
 void UPEGameplayAbility::ActivateWaitCancelInputTask()
 {
     // Add extra tag to the ability system component to tell that we are waiting for cancel input
-    UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Checked();
+    UAbilitySystemComponent* const Comp = GetAbilitySystemComponentFromActorInfo_Ensured();
     if (!AbilityExtraTags.HasTag(FGameplayTag::RequestGameplayTag(GlobalTag_WaitingCancelationState)))
     {
         Comp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(GlobalTag_WaitingCancelationState));

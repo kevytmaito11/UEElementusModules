@@ -35,7 +35,7 @@ APEPlayerController::APEPlayerController(const FObjectInitializer& ObjectInitial
     bOnlyRelevantToOwner = true;
     bAlwaysRelevant = false;
     AActor::SetReplicateMovement(false);
-    NetUpdateFrequency = 100.f;
+    SetNetUpdateFrequency(100.f);
     NetPriority = 3.f;
     NetDormancy = ENetDormancy::DORM_Awake;
 

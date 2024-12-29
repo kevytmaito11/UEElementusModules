@@ -27,7 +27,7 @@ APEPlayerState::APEPlayerState(const FObjectInitializer& ObjectInitializer) : Su
     bOnlyRelevantToOwner = false;
     bAlwaysRelevant = true;
     AActor::SetReplicateMovement(false);
-    NetUpdateFrequency = 1.f;
+    SetNetUpdateFrequency(1.f);
     NetPriority = 1.f;
     NetDormancy = ENetDormancy::DORM_Awake;
 }

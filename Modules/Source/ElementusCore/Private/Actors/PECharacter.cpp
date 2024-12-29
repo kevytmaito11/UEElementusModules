@@ -35,7 +35,7 @@ APECharacter::APECharacter(const FObjectInitializer& ObjectInitializer) : Super(
     bOnlyRelevantToOwner = false;
     bAlwaysRelevant = false;
     AActor::SetReplicateMovement(true);
-    NetUpdateFrequency = 100.f;
+    SetNetUpdateFrequency(100.f);
     NetPriority = 3.f;
     NetDormancy = ENetDormancy::DORM_Awake;
 

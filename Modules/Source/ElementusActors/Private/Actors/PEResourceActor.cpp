@@ -15,7 +15,7 @@ APEResourceActor::APEResourceActor(const FObjectInitializer& ObjectInitializer) 
     bOnlyRelevantToOwner = false;
     bAlwaysRelevant = false;
     AActor::SetReplicateMovement(false);
-    NetUpdateFrequency = 30.f;
+    SetNetUpdateFrequency(30.f);
     NetPriority = 1.f;
     NetDormancy = ENetDormancy::DORM_Initial;
 
