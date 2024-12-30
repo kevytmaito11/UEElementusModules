@@ -706,3 +706,34 @@ void UPEGameplayAbility::WaitCancelInput_Callback()
         CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
     }
 }
+
+bool UPEGameplayAbility::CanActivateAbility(
+    const FGameplayAbilitySpecHandle Handle,
+    const FGameplayAbilityActorInfo* ActorInfo,
+    const FGameplayTagContainer* SourceTags,
+    const FGameplayTagContainer* TargetTags,
+    OUT FGameplayTagContainer* OptionalRelevantTags) const
+{
+    // Make sure the ability system component is valid
+    UAbilitySystemComponent* const AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
+    if (!AbilitySystemComponent)
+    {
+        return false; // Bail out if ASC is invalid
+    }
+
+    // Perform custom checks (example: ActivationRequiredAnyTags)
+    const FGameplayTagContainer& OwnedTags = AbilitySystemComponent->GetOwnedGameplayTags();
+
+    if (ActivationRequiredAnyTags.Num() > 0 && !OwnedTags.HasAny(ActivationRequiredAnyTags))
+    {
+        if (OptionalRelevantTags)
+        {
+            OptionalRelevantTags->AddTag(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.Fail.CanActivate")));
+        }
+        return false; // Failed tag check
+    }
+
+    // Call the parent implementation to handle default logic
+    return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+

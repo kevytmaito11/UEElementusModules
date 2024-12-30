@@ -117,6 +117,10 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus | Properties")
     TObjectPtr<UAnimMontage> AbilityAnimation;
 
+    /** This ability requires the activating actor/component to have any of these tags */
+    UPROPERTY(EditDefaultsOnly, Category = Tags, meta = (Categories = "OwnedTagsCategory"))
+    FGameplayTagContainer ActivationRequiredAnyTags;
+
 private:
     /*
     * This canceling task will only be used to cancel ability when the Cancel Input is pressed
@@ -128,6 +132,14 @@ private:
     /* Default callback for ActivateWaitCancelInputTask */
     UFUNCTION(Category = "Project Elementus | Functions | Callbacks")
     void WaitCancelInput_Callback();
+
+public:
+    virtual bool CanActivateAbility(
+        const FGameplayAbilitySpecHandle Handle,
+        const FGameplayAbilityActorInfo* ActorInfo,
+        const FGameplayTagContainer* SourceTags = nullptr,
+        const FGameplayTagContainer* TargetTags = nullptr,
+        OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 
 protected:
     virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
